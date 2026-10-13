@@ -1,0 +1,91 @@
+<div fxLayout="row" style="padding-bottom: 25px">
+  <mat-label>Customer Registration</mat-label>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onSave()" novalidate>
+
+  <div class="errorSumary" *ngIf="errorMessage.length" role="alert">
+    <strong>No se guardo el Cliente</strong>
+    <ul>
+      <li *ngFor="let msg of errorMessage">{{msg}}</li>
+    </ul>
+  </div>
+
+
+  <div>
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>First Name</mat-label>
+      <input matInput placeholder="First Name" formControlName="firstName" required>
+      <mat-error>First Name Obligatorio</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Last Name</mat-label>
+      <input matInput placeholder="Last Name" formControlName="lastName" required>
+      <mat-error>Last Name Obligatorio</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" placeholder="iser@domine.com" formControlName="email" required>
+      <mat-error *ngIf="hasError('email', 'required')">Email Obligatorio</mat-error>
+      <mat-error *ngIf="hasError('email', 'patterm')">Formato de correo invalido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Phone</mat-label>
+      <input matInput placeholder="Phone" formControlName="phone" required>
+      <mat-error *ngIf="hasError('phone', 'required')">Email Obligatorio</mat-error>
+      <mat-error *ngIf="hasError('phone', 'patterm')">Formato de phone invalido</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="end center">
+    <button mat-raised-button color="primary" [disabled]="saving">
+      {{ saving ? 'Saving...': 'Save'}}
+    </button>
+  </div>
+</form>
+
+
+
+<div fxLayout="row" style="padding-top: 40px">
+  <mat-table matTableResponsive [dataSource]="dataSource" #table fxFill="100">
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="firstName">
+      <mat-header-cell *matHeaderCellDef>First Name</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.firstName}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="lastName">
+      <mat-header-cell *matHeaderCellDef>Last Name</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.lastName}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="phone">
+      <mat-header-cell *matHeaderCellDef>Phone</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.phone}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div class="button" style="cursor: pointer;">
+          <button (click)="onDelete(element)" mat-button><i class="fa fa-delete" *ngIf="element.id"></i> Delete </button>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>
